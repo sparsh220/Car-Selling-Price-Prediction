@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Predictor</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #101827, #284b75);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px 18px;
+            color: #1e293b;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            color: #183153;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(37, 99, 235, 0.25);
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 22px;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding: 25px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <h1>🚗 Car Price Predictor</h1>
+
+        <p class="subtitle">
+            Enter your car details to estimate its selling price.
+        </p>
+
+        <form action="/predict" method="POST">
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+                    <label for="name">Car Brand</label>
+                    <select id="name" name="name" required>
+                        <option value="">Select car brand</option>
+                        <option value="Maruti">Maruti</option>
+                        <option value="Hyundai">Hyundai</option>
+                        <option value="Mahindra">Mahindra</option>
+                        <option value="Tata">Tata</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Chevrolet">Chevrolet</option>
+                        <option value="Renault">Renault</option>
+                        <option value="Volkswagen">Volkswagen</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Manufacturing Year</label>
+                    <select id="year" name="year" required>
+                        <option value="">Select year</option>
+                        {% for year in range(1983, 2021) %}
+                        <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="km_driven">Kilometres Driven</label>
+                    <input id="km_driven" name="km_driven"
+                           type="number" min="0" max="1000000"
+                           step="1000" placeholder="e.g. 45000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fuel">Fuel Type</label>
+                    <select id="fuel" name="fuel" required>
+                        <option value="">Select fuel</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="CNG">CNG</option>
+                        <option value="LPG">LPG</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="seller_type">Seller Type</label>
+                    <select id="seller_type" name="seller_type" required>
+                        <option value="">Select seller</option>
+                        <option value="Individual">Individual</option>
+                        <option value="Dealer">Dealer</option>
+                        <option value="Trustmark Dealer">Trustmark Dealer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="transmission">Transmission</label>
+                    <select id="transmission" name="transmission" required>
+                        <option value="">Select transmission</option>
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="owner">Previous Owner</label>
+                    <select id="owner" name="owner" required>
+                        <option value="">Select owner</option>
+                        <option value="First Owner">First Owner</option>
+                        <option value="Second Owner">Second Owner</option>
+                        <option value="Third Owner">Third Owner</option>
+                        <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+                        <option value="Test Drive Car">Test Drive Car</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mileage">Mileage (km/l or kg)</label>
+                    <input id="mileage" name="mileage"
+                           type="number" min="5" max="100"
+                           step="0.1" placeholder="e.g. 21.4" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="engine">Engine (CC)</label>
+                    <input id="engine" name="engine"
+                           type="number" min="500" max="10000"
+                           step="1" placeholder="e.g. 1248" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="max_power">Max Power (bhp)</label>
+                    <input id="max_power" name="max_power"
+                           type="number" min="15" max="1000"
+                           step="0.1" placeholder="e.g. 74.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="seats">Number of Seats</label>
+                    <select id="seats" name="seats" required>
+                        <option value="">Select seats</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit">Predict Selling Price →</button>
+        </form>
+
+        <p class="footer">Machine Learning · Car Price Estimation</p>
+
+    </main>
+</body>
+</html>
